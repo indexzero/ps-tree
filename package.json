@@ -5,7 +5,9 @@
 , "repository": 
   { "type": "git"
   , "url": "https://github.com/dominictarr/ps-tree.git" }
-, "dependencies": {}
+, "dependencies": {
+    "event-stream": "~0.5"
+  }
 , "devDependencies": {}
 , "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)"
 }
