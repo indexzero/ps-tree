@@ -12,7 +12,7 @@ function childrenOfPid( pid, callback) {
     pid = pid.toString()
   
   es.connect(
-    spawn('ps', ['-A', '-o', 'ppid,pid,cmd']).stdout,
+    spawn('ps', ['-A', '-o', 'ppid,pid']).stdout,
     es.split(),
     es.map(function (line, cb) { //this could parse alot of unix command output
       var columns = line.trim().split(/\s+/)
