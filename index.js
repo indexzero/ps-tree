@@ -1,10 +1,11 @@
 var spawn = require('child_process').spawn, 
-  es    = require('event-stream')
-  ;
+    es    = require('event-stream');
 
 module.exports = childrenOfPid
+
 function childrenOfPid( pid, callback) {
-  var headers = null
+  var headers = null,
+      child;
 
   if('function' !== typeof callback) 
     throw new Error('childrenOfPid(pid, callback) expects callback')
