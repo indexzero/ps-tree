@@ -4,8 +4,7 @@ var spawn = require('child_process').spawn,
 module.exports = childrenOfPid
 
 function childrenOfPid( pid, callback) {
-  var headers = null,
-      child;
+  var headers = null;
 
   if('function' !== typeof callback) 
     throw new Error('childrenOfPid(pid, callback) expects callback')
