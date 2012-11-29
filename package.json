@@ -1,13 +1,12 @@
 { "name": "ps-tree"
-, "version": "0.0.0"
+, "version": "0.0.3"
 , "description": "get all children of a pid"
-, "homepage": "http://github.com/dominictarr/ps-tree"
+, "homepage": "http://github.com/indexzero/ps-tree"
 , "repository": 
   { "type": "git"
-  , "url": "https://github.com/dominictarr/ps-tree.git" }
+  , "url": "https://github.com/indexzero/ps-tree.git" }
 , "dependencies": {
     "event-stream": "~0.5"
   }
-, "devDependencies": {}
-, "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)"
+, "author": "Charlie Robbins"
 }
