@@ -11,7 +11,7 @@ solution: use `ps-tree` to get all processes that a child_process may have start
 ``` js
   var cp = require('child_process'),
       psTree = require('ps-tree')
-    
+
   var child = cp.exec("node -e 'while (true);'",function () {...})
 
   child.kill() //this will not actually kill the child it will kill the `sh` process.
@@ -38,7 +38,7 @@ used ps tree like this:
 
   var cp = require('child_process'),
       psTree = require('ps-tree')
-    
+
   var child = cp.exec("node -e 'while (true);'",function () {...})
 
   psTree(child.pid, function (err, children) {
@@ -46,3 +46,6 @@ used ps tree like this:
   })
 
 ```
+
+If you prefer to run **psTree** from the command line,
+use: `node ./bin/ps-tree.js`

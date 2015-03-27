@@ -11,8 +11,8 @@ function childrenOfPid( pid, callback) {
   if('number' == typeof pid) {
     pid = pid.toString()
   }
-  else{
-    pid = parseInt(pid, 10).toString();
+  else {
+    pid = parseInt(pid, 10).toString(); // force string
   }
 
   es.connect(
