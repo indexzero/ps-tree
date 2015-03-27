@@ -1,12 +1,39 @@
 { "name": "ps-tree"
-, "version": "0.0.3"
-, "description": "get all children of a pid"
+, "version": "0.0.4"
+, "description": "Get all children of a pid"
 , "homepage": "http://github.com/indexzero/ps-tree"
-, "repository": 
+, "repository":
   { "type": "git"
-  , "url": "https://github.com/indexzero/ps-tree.git" }
+,   "url": "https://github.com/indexzero/ps-tree.git" }
 , "dependencies": {
-    "event-stream": "~0.5"
+    "event-stream": "~3.3.0"
   }
 , "author": "Charlie Robbins"
+, "directories": {
+    "test": "test"
+  }
+, "scripts": {
+    "quick": "./node_modules/tape/bin/tape ./test/*.js"
+,   "test": "./node_modules/.bin/istanbul cover ./node_modules/tape/bin/tape ./test/*.js"
+,   "direct": "./node_modules/.bin/istanbul cover ./node_modules/tape/bin/tape ./test/direct.js"
+,   "coverage": "./node_modules/.bin/istanbul cover ./node_modules/tape/bin/tape ./test/*.js && ./node_modules/.bin/istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100"
+,   "jshint": "./node_modules/jshint/bin/jshint -c .jshintrc --exclude-path .gitignore ."
+,   "codeclimate": "CODECLIMATE_REPO_TOKEN=84436b4f13c70ace9c62e7f04928bf23c234eb212c0232d39d7fb1535beb2da5 ./node_modules/codeclimate-test-reporter/bin/codeclimate.js < ./coverage/lcov.info"
+  }
+, "devDependencies": {
+    "chalk": "^1.0.0"
+,   "codeclimate-test-reporter": "0.0.4"
+,   "ignored": "^2.0.2"
+,   "istanbul": "^0.3.4"
+,   "jshint": "^2.5.10"
+,   "mkdirp": "^0.5.0"
+,   "pre-commit": "0.0.9"
+,   "tape": "^3.0.3"
+  }
+, "pre-commit": [
+    "coverage"
+  ]
+, "engines": {
+    "node": ">=0.10"
+  }
 }

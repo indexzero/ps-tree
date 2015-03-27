@@ -11,7 +11,7 @@ solution: use `ps-tree` to get all processes that a child_process may have start
 ``` js
   var cp = require('child_process'),
       psTree = require('ps-tree')
-    
+
   var child = cp.exec("node -e 'while (true);'",function () {...})
 
   child.kill() //this will not actually kill the child it will kill the `sh` process.
@@ -38,7 +38,7 @@ used ps tree like this:
 
   var cp = require('child_process'),
       psTree = require('ps-tree')
-    
+
   var child = cp.exec("node -e 'while (true);'",function () {...})
 
   psTree(child.pid, function (err, children) {
@@ -46,3 +46,17 @@ used ps tree like this:
   })
 
 ```
+
+If you prefer to run **psTree** from the command line,
+use: `node ./bin/ps-tree.js`
+
+
+<br /> <!-- badges -->
+[![Build Status](https://travis-ci.org/nelsonic/ps-tree.svg)](https://travis-ci.org/nelsonic/ps-tree)
+[![Code Climate](https://codeclimate.com/github/nelsonic/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
+[![Test Coverage](https://codeclimate.com/github/nelsonic/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
+[![npm version](https://badge.fury.io/js/ps-tree.svg)](http://badge.fury.io/js/ps-tree)
+[![Node.js Version][node-version-image]][node-version-url]
+[![Dependency Status](https://david-dm.org/nelsonic/ps-tree.svg)](https://david-dm.org/nelsonic/ps-tree)
+[node-version-image]: https://img.shields.io/node/v/listdirs.svg?style=flat
+[node-version-url]: http://nodejs.org/download/
