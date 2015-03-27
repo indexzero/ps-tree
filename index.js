@@ -11,6 +11,9 @@ function childrenOfPid( pid, callback) {
   if('number' == typeof pid) {
     pid = pid.toString()
   }
+  else{
+    pid = parseInt(pid, 10).toString();
+  }
 
   es.connect(
     spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
@@ -28,7 +31,7 @@ function childrenOfPid( pid, callback) {
         }
         return cb(null, row)
       }
-      return cb()
+      return cb();
     }),
     es.writeArray(function (err, ps) {
       var parents = [pid], children = []
@@ -41,10 +44,4 @@ function childrenOfPid( pid, callback) {
       callback(null, children)
     })
   ).on('error', callback)
-}
-
-if(!module.parent) {
-  childrenOfPid(process.argv[2] || 1, function (err, data) {
-  console.log(data)
-  })
 }

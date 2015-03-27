@@ -30,6 +30,9 @@
 ,   "pre-commit": "0.0.9"
 ,   "tape": "^3.0.3"
   }
+, "pre-commit": [
+    "coverage"
+  ]
 , "engines": {
     "node": ">=0.10"
   }

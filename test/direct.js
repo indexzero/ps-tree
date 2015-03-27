@@ -6,16 +6,15 @@ var cp = require('child_process');
 // var fs = require('fs');
 // fs.chmodSync('./index.js', 777);
 
-test(cyan('Directly Execute index.js without requiring the module'), function (t) {
+test(cyan('Directly Execute bin/ps-tree.js'), function (t) {
   var first = cp.exec("node -v", function(error, stdout, stderr) {
   })
-  var child = cp.exec("node ./index.js", function(error, data) {
-    console.log('data: ' + data.length);
+  var child = cp.exec("node ./bin/ps-tree.js", function(error, data) {
+    // console.log('data: ' + data.length);
     if (error !== null) {
         console.log(red('exec error: ' + error));
     }
   })
-  // console.log(first.pid)
-  t.true(child, green("✓ Called index.js directly. it worked."));
+  t.true(child.pid, green("✓ Called ./bin/ps-tree.js directly. worked as expected"));
   t.end();
 });

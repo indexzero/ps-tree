@@ -29,14 +29,14 @@ test(cyan('Spawn a Parent Process which has a Two Child Processes'), function (t
       t.equal(children.length, 0, green("✓ No more active child processes"));
       t.end();
     })
-  },200); // ensure the child process was both started and killed by psTree
+  },300); // ensure the child process was both started and killed by psTree
 });
 
-test(cyan('Attempt to call psTree without supplying a Callback'), function (t) {
+test(cyan('FORCE ERROR by calling psTree without supplying a Callback'), function (t) {
   var child = cp.exec("node ../index.js 12345", function(error, stdout, stderr) {
   })
   var errmsg = "Error: childrenOfPid(pid, callback) expects callback"
-  setTimeout(function(){
+  // setTimeout(function(){
     try {
       psTree(child.pid); // attempt to call psTree without a callback
     }
@@ -46,28 +46,20 @@ test(cyan('Attempt to call psTree without supplying a Callback'), function (t) {
     }
     t.end();
 
-  },100); // using setTimeout to ensure the child process gets started
+  // },100); // using setTimeout to ensure the child process gets started
 });
 
 
-test(cyan('Spawn a Child Process'), function (t) {
-  var first = cp.exec("node ./test/exec/child.js", function(error, stdout, stderr) {
-  })
-  var child = cp.exec("node ../index.js '"+first.pid +"'", function(error, stdout, stderr) {
+test(cyan('Spawn a Child Process and psTree with a String as pid'), function (t) {
+  var child = cp.exec("node ./test/exec/child.js", function(error, stdout, stderr) { });
+  psTree(child.pid.toString(), function (err, children) {
+    if(err){
+      console.log(err);
+    }
+    cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
   })
   setTimeout(function(){
-    psTree(first.pid, function (err, children) {
-      if(err){
-        console.log(err);
-      }
-      // console.log("Children: ", children, '\n');
-      // t.equal(children.length, 2, green("✓ There are "+children.length+" active child processes"));
-      cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
-    })
-  },100); // using setTimeout to ensure the child process gets started
-
-  setTimeout(function(){
-    psTree(child.pid, function (err, children) {
+    psTree(child.pid.toString(), function (err, children) {
       if(err){
         console.log(err);
       }
@@ -76,5 +68,5 @@ test(cyan('Spawn a Child Process'), function (t) {
       t.equal(children.length, 0, green("✓ No more active child processes"));
       t.end();
     })
-  },200); // ensure the child process was both started and killed by psTree
+  },300); // ensure the child process was both started and killed by psTree
 });
