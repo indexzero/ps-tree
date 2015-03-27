@@ -51,7 +51,6 @@ If you prefer to run **psTree** from the command line,
 use: `node ./bin/ps-tree.js`
 
 
-<br /> <!-- badges -->
 [![Build Status](https://travis-ci.org/nelsonic/ps-tree.svg)](https://travis-ci.org/nelsonic/ps-tree)
 [![Code Climate](https://codeclimate.com/github/nelsonic/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
 [![Test Coverage](https://codeclimate.com/github/nelsonic/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
