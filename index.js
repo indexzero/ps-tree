@@ -1,4 +1,4 @@
-var spawn = require('child_process').spawn, 
+var spawn = require('child_process').spawn,
     es    = require('event-stream');
 
 module.exports = childrenOfPid
@@ -6,11 +6,12 @@ module.exports = childrenOfPid
 function childrenOfPid( pid, callback) {
   var headers = null;
 
-  if('function' !== typeof callback) 
+  if('function' !== typeof callback)
     throw new Error('childrenOfPid(pid, callback) expects callback')
-  if('number' == typeof pid)
+  if('number' == typeof pid) {
     pid = pid.toString()
-  
+  }
+
   es.connect(
     spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
     es.split(),
@@ -20,7 +21,7 @@ function childrenOfPid( pid, callback) {
         headers = columns
       else {
         var row = {}
-        //for each header, 
+        //for each header,
         var h = headers.slice()
         while (h.length) {
           row[h.shift()] = h.length ? columns.shift() : columns.join(' ')
@@ -37,7 +38,7 @@ function childrenOfPid( pid, callback) {
           children.push(proc)
         }
       })
-      callback(null, children)    
+      callback(null, children)
     })
   ).on('error', callback)
 }
