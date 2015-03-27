@@ -9,12 +9,12 @@ this a feature of UNIX.
 solution: use `ps-tree` to get all processes that a child_process may have started, so that they may all be terminated.
 
 ``` js
-  var cp = require('child_process'),
-      psTree = require('ps-tree')
+var cp = require('child_process'),
+    psTree = require('ps-tree')
 
-  var child = cp.exec("node -e 'while (true);'",function () {...})
+var child = cp.exec("node -e 'while (true);'",function () {...})
 
-  child.kill() //this will not actually kill the child it will kill the `sh` process.
+child.kill() //this will not actually kill the child it will kill the `sh` process.
 
 ```
 
@@ -35,15 +35,14 @@ but since it is in `wait` mode killing it does not kill the children.
 used ps tree like this:
 
 ``` js
+var cp = require('child_process'),
+    psTree = require('ps-tree')
 
-  var cp = require('child_process'),
-      psTree = require('ps-tree')
+var child = cp.exec("node -e 'while (true);'",function () {...})
 
-  var child = cp.exec("node -e 'while (true);'",function () {...})
-
-  psTree(child.pid, function (err, children) {
-    cp.spawn('kill', ['-9'].concat(children.map(function (p) {return p.PID})))
-  })
+psTree(child.pid, function (err, children) {
+  cp.spawn('kill', ['-9'].concat(children.map(function (p) {return p.PID})))
+})
 
 ```
 

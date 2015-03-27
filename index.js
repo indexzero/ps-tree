@@ -8,12 +8,8 @@ function childrenOfPid( pid, callback) {
 
   if('function' !== typeof callback)
     throw new Error('childrenOfPid(pid, callback) expects callback')
-  if('number' == typeof pid) {
+  if('number' == typeof pid)
     pid = pid.toString()
-  }
-  else {
-    pid = parseInt(pid, 10).toString(); // force string
-  }
 
   es.connect(
     spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
@@ -31,7 +27,7 @@ function childrenOfPid( pid, callback) {
         }
         return cb(null, row)
       }
-      return cb();
+      return cb()
     }),
     es.writeArray(function (err, ps) {
       var parents = [pid], children = []
