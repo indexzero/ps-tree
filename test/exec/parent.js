@@ -2,7 +2,7 @@ var cp = require('child_process');
 var chalk = require('chalk');
 var red = chalk.red, green = chalk.green, cyan = chalk.cyan;
 var count = 0;
-while(count < 2) {
+while(count < 10) {
   var child = cp.exec("node ./test/exec/child.js", function(error, stdout, stderr) {
       console.log('stdout: ' + stdout);
       console.log(red('stderr: ' + stderr));

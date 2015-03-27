@@ -6,7 +6,7 @@
   { "type": "git"
 ,   "url": "https://github.com/indexzero/ps-tree.git" }
 , "dependencies": {
-    "event-stream": "~0.5"
+    "event-stream": "~3.3.0"
   }
 , "author": "Charlie Robbins"
 , "directories": {
