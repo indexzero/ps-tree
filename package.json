@@ -18,7 +18,7 @@
 ,   "direct": "./node_modules/.bin/istanbul cover ./node_modules/tape/bin/tape ./test/direct.js"
 ,   "coverage": "./node_modules/.bin/istanbul cover ./node_modules/tape/bin/tape ./test/*.js && ./node_modules/.bin/istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100"
 ,   "jshint": "./node_modules/jshint/bin/jshint -c .jshintrc --exclude-path .gitignore ."
-,   "codeclimate": "CODECLIMATE_REPO_TOKEN=ee15cc1e740638c273889ceb2cf1e3b2769697a6860760ba40c4df328e2a5a90 ./node_modules/codeclimate-test-reporter/bin/codeclimate.js < ./coverage/lcov.info"
+,   "codeclimate": "CODECLIMATE_REPO_TOKEN=84436b4f13c70ace9c62e7f04928bf23c234eb212c0232d39d7fb1535beb2da5 ./node_modules/codeclimate-test-reporter/bin/codeclimate.js < ./coverage/lcov.info"
   }
 , "devDependencies": {
     "chalk": "^1.0.0"
