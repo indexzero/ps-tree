@@ -1,6 +1,6 @@
 {
   "name": "ps-tree",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Get all children of a pid",
   "homepage": "http://github.com/indexzero/ps-tree",
   "repository": {
