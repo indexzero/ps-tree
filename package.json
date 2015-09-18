@@ -10,7 +10,8 @@
   "dependencies": {
     "event-stream": "~3.3.0"
   },
-  "author": "Charlie Robbins",
+  "license": "MIT",
+  "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "directories": {
     "test": "test"
   },
