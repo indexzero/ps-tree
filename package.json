@@ -1,6 +1,6 @@
 {
   "name": "ps-tree",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get all children of a pid",
   "homepage": "http://github.com/indexzero/ps-tree",
   "repository": {
@@ -11,6 +11,7 @@
     "event-stream": "~3.3.0"
   },
   "author": "Charlie Robbins",
+  "license": "MIT",
   "directories": {
     "test": "test"
   },
