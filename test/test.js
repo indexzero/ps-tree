@@ -20,7 +20,8 @@ test(cyan('Spawn a Parent process which has a Two Child Processes'), function (t
       if (err) { console.log(err); }
       console.log(red('Children: '), children, '\n');
       t.true(children.length > 0, green('✓ There are ' + children.length + ' active child processes'));
-      cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
+      // cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
+      require('tree-kill')(parent.pid);
     });
 
     setTimeout(function () {
@@ -31,8 +32,9 @@ test(cyan('Spawn a Parent process which has a Two Child Processes'), function (t
         t.equal(children.length, 0, green('✓ No more active child processes (we killed them)'));
         t.end();
       });
-    }, 1000); // give psTree time to kill the processes
-  }, 200); // give the child process time to spawn
+    }, 2000); // give psTree time to kill the processes
+  }, 500); // give the child process time to spawn
+  // need more time on a slow(or heavy load server). maybe promise.then is better instead of the timeout
 });
 
 test(cyan('FORCE ERROR by calling psTree without supplying a Callback'), function (t) {
@@ -52,7 +54,8 @@ test(cyan('Spawn a Child Process and psTree with a String as pid'), function (t)
   setTimeout(function(){
     psTree(child.pid.toString(), function (err, children) {
       if (err) { console.log(err); }
-      cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
+      // cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
+      require('tree-kill')(child.pid);
     });
 
     setTimeout(function() {

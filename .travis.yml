@@ -3,6 +3,15 @@ node_js:
   - "0.10"
   - "0.12"
   - "4.0"
+  - "5.0"
+  - "6.0"
+  - "6.1"
+  - "6.2"
+os:
+  - linux
+  - centos
+  - macosx
+  - windows
 
 before_install:
   - travis_retry npm install -g npm@2.14.2

@@ -13,14 +13,71 @@ module.exports = function childrenOfPid(pid, callback) {
   if (typeof pid === 'number') {
     pid = pid.toString();
   }
+/**
+ *
+Linux:
+1. " <defunct> " need to be striped
+```bash
+$ ps -A -o comm,ppid,pid,stat
+COMMAND          PPID   PID STAT
+bbsd             2899 16958 Ss
+watch <defunct>  1914 16964 Z
+ps              20688 16965 R+
+```bash
+
+Win32:
+1. wmic PROCESS WHERE ParentProcessId=4604 GET Name,ParentProcessId,ProcessId,Status)
+2. the order of head columns is fixed
+```shell
+> wmic PROCESS GET Name,ProcessId,ParentProcessId,Status
+Name                          ParentProcessId  ProcessId   Status
+System Idle Process           0                0
+System                        0                4
+smss.exe                      4                228
+```
+ *
+ */
+  var processLister;
+  switch (process.platform) {
+    case 'win32':
+      // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
+      processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
+      break;
+    case 'darwin': // Mac TODO: Test and confirm
+    default: // Linux
+      processLister = spawn('ps', ['-A', '-o', 'comm,ppid,pid,stat']);
+      break;
+  }
 
   es.connect(
-    spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
+    // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
+    processLister.stdout,
     es.split(),
     es.map(function (line, cb) { //this could parse alot of unix command output
+      /**
+       * XX Quick and dirty: ' <defunct> ' need to be striped under linux
+       * i.e. "watch <defunct>  1914 16964 Z"
+       */
+      line = line.replace(/ <defunct> /, '')
+
       var columns = line.trim().split(/\s+/);
       if (!headers) {
         headers = columns;
+        // Rename Win32 header name, to as same as the linux, for compatible.
+        headers = headers.map(function(h) {
+          switch (h) {
+            case 'Name':
+              return 'COMMAND'; break;
+            case 'ParentProcessId':
+              return 'PPID'; break;
+            case 'ProcessId':
+              return 'PID'; break;
+            case 'Status':
+              return 'STAT'; break;
+            default:
+              throw new Error('unknown header')
+          }
+        })
         return cb();
       }
 
