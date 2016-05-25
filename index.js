@@ -45,7 +45,7 @@ smss.exe                      4                228
       break;
     case 'darwin': // Mac TODO: Test and confirm
     default: // Linux
-      processLister = spawn('ps', ['-A', '-o', 'comm,ppid,pid,stat']);
+      processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
       break;
   }
 
@@ -54,12 +54,6 @@ smss.exe                      4                228
     processLister.stdout,
     es.split(),
     es.map(function (line, cb) { //this could parse alot of unix command output
-      /**
-       * XX Quick and dirty: ' <defunct> ' need to be striped under linux
-       * i.e. "watch <defunct>  1914 16964 Z"
-       */
-      line = line.replace(/ <defunct> /, '')
-
       var columns = line.trim().split(/\s+/);
       if (!headers) {
         headers = columns;
