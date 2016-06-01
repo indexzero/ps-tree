@@ -2,15 +2,15 @@
 
 'use strict';
 
-var ppid
-switch (process.platform) {
-  case 'win32':
-    ppid = 0
-    break;
-  default: // Linux
-    ppid = 1
-    break;
+//
+// Change the default parent PID if running
+// under Windows.
+//
+var ppid = 1;
+if (process.platform === 'win32') {
+  ppid = 0;
 }
+
 require('../')(process.argv[2] || ppid, function (err, data) {
   console.log(data);
 });

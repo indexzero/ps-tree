@@ -1,4 +1,12 @@
-#ps-tree
+# ps-tree [![Build Status](https://travis-ci.org/indexzero/ps-tree.svg)](https://travis-ci.org/indexzero/ps-tree) [![Build status](https://ci.appveyor.com/api/projects/status/15yvc221rx8lt8o7?svg=true)](https://ci.appveyor.com/project/zixia/ps-tree)
+
+[![Code Climate](https://codeclimate.com/github/indexzero/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/indexzero/ps-tree)
+[![Test Coverage](https://codeclimate.com/github/indexzero/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/indexzero/ps-tree)
+[![npm version](https://badge.fury.io/js/ps-tree.svg)](http://badge.fury.io/js/ps-tree)
+[![Node.js Version][node-version-image]][node-version-url]
+[![Dependency Status](https://david-dm.org/indexzero/ps-tree.svg)](https://david-dm.org/indexzero/ps-tree)
+[node-version-image]: https://img.shields.io/node/v/listdirs.svg?style=flat
+[node-version-url]: http://nodejs.org/download/
 
 Sometimes you cannot kill child processes like you would expect, this a feature of UNIX.
 
@@ -9,9 +17,9 @@ Solution: use `ps-tree` to get all processes that a `child_process` may have sta
 
 ``` js
 var cp = require('child_process'),
-    psTree = require('ps-tree')
+    psTree = require('ps-tree');
 
-var child = cp.exec("node -e 'while (true);'",function () {...})
+var child = cp.exec("node -e 'while (true);'", function () {...});
 
 // This will not actually kill the child it will kill the `sh` process.
 child.kill();
@@ -44,16 +52,30 @@ psTree(child.pid, function (err, children) {
 
 If you prefer to run **psTree** from the command line, use: `node ./bin/ps-tree.js`
 
-P.S. ps-tree also support Win32.
+## Cross Platform support
 
-[![Build Status](https://travis-ci.org/nelsonic/ps-tree.svg)](https://travis-ci.org/nelsonic/ps-tree)
-[![Build status](https://ci.appveyor.com/api/projects/status/15yvc221rx8lt8o7?svg=true)](https://ci.appveyor.com/project/zixia/ps-tree)
+The `ps-tree` module behaves differently on *nix vs. Windows by spawning different programs and parsing their output. This is based on `process.platform` and not on checking to see if a `ps` compatible program exists on the system.
 
-[![Code Climate](https://codeclimate.com/github/nelsonic/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
-[![Test Coverage](https://codeclimate.com/github/nelsonic/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
-[![npm version](https://badge.fury.io/js/ps-tree.svg)](http://badge.fury.io/js/ps-tree)
-[![Node.js Version][node-version-image]][node-version-url]
-[![Dependency Status](https://david-dm.org/nelsonic/ps-tree.svg)](https://david-dm.org/nelsonic/ps-tree)
+#### *nix
 
-[node-version-image]: https://img.shields.io/node/v/listdirs.svg?style=flat
-[node-version-url]: http://nodejs.org/download/
+1. " <defunct> " need to be striped
+```bash
+$ ps -A -o comm,ppid,pid,stat
+COMMAND          PPID   PID STAT
+bbsd             2899 16958 Ss
+watch <defunct>  1914 16964 Z
+ps              20688 16965 R+
+```
+
+### Windows
+1. `wmic PROCESS WHERE ParentProcessId=4604 GET Name,ParentProcessId,ProcessId,Status)`
+2. The order of head columns is fixed
+```shell
+> wmic PROCESS GET Name,ProcessId,ParentProcessId,Status
+Name                          ParentProcessId  ProcessId   Status
+System Idle Process           0                0
+System                        0                4
+smss.exe                      4                228
+```
+
+### LICENSE: MIT

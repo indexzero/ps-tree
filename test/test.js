@@ -2,6 +2,7 @@ var path = require('path');
 var test  = require('tape');
 var chalk = require('chalk');
 var cp = require('child_process');
+var treeKill = require('tree-kill');
 var psTree = require('../');
 
 var red = chalk.red,
@@ -15,13 +16,13 @@ var scripts = {
 
 test(cyan('Spawn a Parent process which has a Two Child Processes'), function (t) {
   var parent = cp.exec('node ' + scripts.parent, function (error, stdout, stderr) {});
+
   setTimeout(function () {
     psTree(parent.pid, function (err, children) {
       if (err) { console.log(err); }
       console.log(red('Children: '), children, '\n');
       t.true(children.length > 0, green('✓ There are ' + children.length + ' active child processes'));
-      // cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
-      require('tree-kill')(parent.pid);
+      treeKill(parent.pid);
     });
 
     setTimeout(function () {
@@ -55,7 +56,7 @@ test(cyan('Spawn a Child Process and psTree with a String as pid'), function (t)
     psTree(child.pid.toString(), function (err, children) {
       if (err) { console.log(err); }
       // cp.spawn('kill', ['-9'].concat(children.map(function (p) { return p.PID })))
-      require('tree-kill')(child.pid);
+      treeKill(child.pid);
     });
 
     setTimeout(function() {
