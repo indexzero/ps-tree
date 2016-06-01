@@ -1,7 +1,10 @@
 var cp = require('child_process');
 var chalk = require('chalk');
-var red = chalk.red, green = chalk.green, cyan = chalk.cyan;
+var red = chalk.red
+var green = chalk.green
+var cyan = chalk.cyan;
 var count = 0;
+
 while(count < 10) {
   var child = cp.exec("node ./test/exec/child.js", function(error, stdout, stderr) {
     console.log('stdout: ' + stdout);
@@ -10,6 +13,6 @@ while(count < 10) {
       console.log(red('exec error: ' + error));
     }
   })
-  console.log("child pid: "+child.pid + " | count: "+count);
-  count++
+
+  console.log("child pid: %s | count: %s", child.pid, ++count);
 }
