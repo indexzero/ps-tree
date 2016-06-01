@@ -47,10 +47,13 @@ If you prefer to run **psTree** from the command line, use: `node ./bin/ps-tree.
 P.S. ps-tree also support Win32.
 
 [![Build Status](https://travis-ci.org/nelsonic/ps-tree.svg)](https://travis-ci.org/nelsonic/ps-tree)
+[![Build status](https://ci.appveyor.com/api/projects/status/15yvc221rx8lt8o7?svg=true)](https://ci.appveyor.com/project/zixia/ps-tree)
+
 [![Code Climate](https://codeclimate.com/github/nelsonic/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
 [![Test Coverage](https://codeclimate.com/github/nelsonic/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/nelsonic/ps-tree)
 [![npm version](https://badge.fury.io/js/ps-tree.svg)](http://badge.fury.io/js/ps-tree)
 [![Node.js Version][node-version-image]][node-version-url]
 [![Dependency Status](https://david-dm.org/nelsonic/ps-tree.svg)](https://david-dm.org/nelsonic/ps-tree)
+
 [node-version-image]: https://img.shields.io/node/v/listdirs.svg?style=flat
 [node-version-url]: http://nodejs.org/download/
