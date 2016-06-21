@@ -28,6 +28,12 @@ module.exports = function childrenOfPid(pid, callback) {
   // ps              20688 16965 R+
   // ```
   //
+  // Darwin:
+  // $ ps -A -o comm,ppid,pid,stat
+  // COMM              PPID   PID STAT
+  // /sbin/launchd        0     1 Ss
+  // /usr/libexec/Use     1    43 Ss
+  //
   // Win32:
   // 1. wmic PROCESS WHERE ParentProcessId=4604 GET Name,ParentProcessId,ProcessId,Status)
   // 2. The order of head columns is fixed
@@ -111,6 +117,9 @@ function normalizeHeader(str) {
       break;
     case 'Status':
       return 'STAT';
+      break;
+    case 'COMM':  // for darwin
+      return 'COMMAND';
       break;
     default:
       throw new Error('Unknown process listing header: ' + str);
