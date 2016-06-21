@@ -106,7 +106,8 @@ function normalizeHeader(str) {
   }
 
   switch (str) {
-    case 'Name':
+    case 'Name':  // for win32
+    case 'COMM':  // for darwin
       return 'COMMAND';
       break;
     case 'ParentProcessId':
@@ -117,9 +118,6 @@ function normalizeHeader(str) {
       break;
     case 'Status':
       return 'STAT';
-      break;
-    case 'COMM':  // for darwin
-      return 'COMMAND';
       break;
     default:
       throw new Error('Unknown process listing header: ' + str);
