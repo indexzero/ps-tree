@@ -1,7 +1,7 @@
 'use strict';
 
 var spawn = require('child_process').spawn,
-    es    = require('event-stream');
+  es = require('event-stream');
 
 module.exports = function childrenOfPid(pid, callback) {
   var headers = null;
@@ -9,10 +9,10 @@ module.exports = function childrenOfPid(pid, callback) {
   if (typeof callback !== 'function') {
     throw new Error('childrenOfPid(pid, callback) expects callback');
   }
-
-  if (typeof pid === 'number') {
-    pid = pid.toString();
-  }
+  
+  var pidIsArray = Array.isArray(pid)
+  var pids = pidIsArray ? pid : [pid]    
+  pids = pids.map(pid => pid.toString());
 
   //
   // The `ps-tree` module behaves differently on *nix vs. Windows
@@ -73,17 +73,20 @@ module.exports = function childrenOfPid(pid, callback) {
       return cb(null, row);
     }),
     es.writeArray(function (err, ps) {
-      var parents = [pid],
+      var results = pids.map(function (pid) {
+        var parents = [pid],
           children = [];
 
-      ps.forEach(function (proc) {
-        if (parents.indexOf(proc.PPID) !== -1) {
-          parents.push(proc.PID)
-          children.push(proc)
-        }
-      });
+        ps.forEach(function (proc) {
+          if (parents.indexOf(proc.PPID) !== -1) {
+            parents.push(proc.PID)
+            children.push(proc)
+          }
+        });
+        return children
+      })
 
-      callback(null, children);
+      callback(null, pidIsArray ? results : results[0]);
     })
   ).on('error', callback)
 }
