@@ -101,10 +101,6 @@ module.exports = function childrenOfPid(pid, callback) {
  * @param {string} str Header string to normalize
  */
 function normalizeHeader(str) {
-  if (process.platform !== 'win32') {
-    return str;
-  }
-
   switch (str) {
     case 'Name':  // for win32
     case 'COMM':  // for darwin
@@ -120,6 +116,6 @@ function normalizeHeader(str) {
       return 'STAT';
       break;
     default:
-      throw new Error('Unknown process listing header: ' + str);
+      return str
   }
 }
