@@ -38,6 +38,34 @@ test(cyan('Spawn a Parent process which has a Two Child Processes'), function (t
   // need more time on a slow(or heavy load server). maybe promise.then is better instead of the timeout
 });
 
+test(cyan('Spawn Two parent processes each has a Two Child Processes'), function (t) {
+  var parent1 = cp.exec('node ' + scripts.parent, function (error, stdout, stderr) {});
+  var parent2 = cp.exec('node ' + scripts.parent, function (error, stdout, stderr) {});
+
+  setTimeout(function () {
+    psTree([parent1.pid, parent2.pid], function (err, children) {
+      if (err) { console.log(err); }
+      console.log(red('Children: '), children, '\n');
+      t.true(children[0].length > 0, green('✓ There are ' + children[0].length + ' active child processes of first'));
+      t.true(children[1].length > 0, green('✓ There are ' + children[1].length + ' active child processes of second'));
+      treeKill(parent1.pid);
+      treeKill(parent2.pid);
+    });
+
+    setTimeout(function () {
+      psTree([parent1.pid, parent2.pid], function (err, children) {
+        if (err) { console.log(err); }
+        // console.log('Children: ', children, '\n');
+        // console.log(' ')
+        t.equal(children[0].length, 0, green('✓ No more active child processes of first(we killed them)'));
+        t.equal(children[1].length, 0, green('✓ No more active child processes of second (we killed them)'));
+        t.end();
+      });
+    }, 2000); // give psTree time to kill the processes
+  }, 500); // give the child process time to spawn
+  // need more time on a slow(or heavy load server). maybe promise.then is better instead of the timeout
+});
+
 test(cyan('FORCE ERROR by calling psTree without supplying a Callback'), function (t) {
   var errmsg = 'Error: childrenOfPid(pid, callback) expects callback'
   // Attempt to call psTree without a callback

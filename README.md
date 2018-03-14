@@ -49,6 +49,14 @@ psTree(child.pid, function (err, children) {
 });
 ```
 
+You can also pass more then one pid in array, and get corresponding array as result
+``` js
+psTree([child1.pid, child2.pid], function (err, children) {
+  cp.spawn('kill', ['-9'].concat(children[0].map(function (p) { return p.PID })));
+  cp.spawn('kill', ['-9'].concat(children[1].map(function (p) { return p.PID })));
+}); 
+```
+
 If you prefer to run **psTree** from the command line, use: `node ./bin/ps-tree.js`
 
 ## Cross Platform support
