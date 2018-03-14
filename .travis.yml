@@ -1,14 +1,14 @@
 sudo: false
 language: node_js
 node_js:
-  - "9"
-  - "8"
-  - "7"
-  - "6"
-  - "5"
-  - "4"
-  - "0.12"
-  - "0.10"
+  - '9'
+  - '8'
+  - '7'
+  - '6'
+  - '5'
+  - '4'
+  - '0.12'
+  - '0.10'
 os:
   - linux
   - osx
@@ -16,4 +16,6 @@ cache:
   directories:
   - node_modules
 script:
+  - node --version
+  - npm --version
   - npm test
