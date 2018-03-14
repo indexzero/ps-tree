@@ -73,12 +73,13 @@ module.exports = function childrenOfPid(pid, callback) {
       return cb(null, row);
     }),
     es.writeArray(function (err, ps) {
-      var parents = [pid],
+      var parents = {},
           children = [];
 
+      parents[pid] = true;
       ps.forEach(function (proc) {
-        if (parents.indexOf(proc.PPID) !== -1) {
-          parents.push(proc.PID)
+        if (parents[proc.PPID]) {
+          parents[proc.PID] = true;
           children.push(proc)
         }
       });
