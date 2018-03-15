@@ -15,7 +15,14 @@ os:
 cache:
   directories:
   - node_modules
+install:
+  - node --version
+  - npm --version
+  - npm install
 script:
   - node --version
   - npm --version
   - npm test
+after_success:
+  - npm run coverage
+  - npm run codeclimate
