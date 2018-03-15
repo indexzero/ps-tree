@@ -13,34 +13,34 @@ var scripts = {
   child: path.join(__dirname, 'exec', 'child.js')
 };
 
-test(cyan('Spawn a Parent process which has a Two Child Processes'), function (t) {
+test(cyan('Spawn a Parent process which has ten Child processes'), function (t) {
   t.timeoutAfter(5000);
-  var parent = cp.exec('node ' + scripts.parent, function (error, stdout, stderr) {});
+  var parent = cp.exec('node ' + scripts.parent);
 
   var started = false;
   parent.stdout.on('data', function (data) {
     if (started) return;
     started = true;
 
-    psTree(parent.pid, function (err, children) {
-      if (err) {
-        t.error(err);
+    psTree(parent.pid, function (error, children) {
+      if (error) {
+        t.error(error);
         t.end();
         return;
       }
 
-      t.true(children.length > 0, green('✓ There are ' + children.length + ' active child processes'));
+      t.equal(children.length, 10, green('✓ There are ' + children.length + ' active child processes'));
 
-      treeKill(parent.pid, function(err) {
-        if (err) {
-          t.error(err);
+      treeKill(parent.pid, function(error) {
+        if (error) {
+          t.error(error);
           t.end();
           return;
         }
 
-        psTree(parent.pid, function (err, children) {
-          if (err) {
-            t.error(err);
+        psTree(parent.pid, function (error, children) {
+          if (error) {
+            t.error(error);
             t.end();
             return;
           }
@@ -67,29 +67,30 @@ test(cyan('FORCE ERROR by calling psTree without supplying a Callback'), functio
 
 test(cyan('Spawn a Child Process and psTree with a String as pid'), function (t) {
   t.timeoutAfter(5000);
-  var child = cp.exec('node ' + scripts.child, function(error, stdout, stderr) {});
+  var child = cp.exec('node ' + scripts.child);
 
   var started = false;
   child.stdout.on('data', function (data) {
     if (started) return;
     started = true;
 
-    psTree(child.pid, function (err, children) {
-      if (err) {
-        t.error(err);
+    psTree(child.pid, function (error, children) {
+      if (error) {
+        t.error(error);
         t.end();
         return;
       }
-      treeKill(child.pid, function(err) {
-        if (err) {
-          t.error(err);
+      t.equal(children.length, 0, green('✓ There are ' + children.length + ' active child processes'));
+      treeKill(child.pid, function(error) {
+        if (error) {
+          t.error(error);
           t.end();
           return;
         }
 
-        psTree(child.pid, function (err, children) {
-          if (err) {
-            t.error(err);
+        psTree(child.pid, function (error, children) {
+          if (error) {
+            t.error(error);
             t.end();
             return;
           }
