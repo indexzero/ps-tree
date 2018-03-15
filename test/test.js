@@ -18,7 +18,7 @@ test(cyan('Spawn a Parent process which has a Two Child Processes'), function (t
   var parent = cp.exec('node ' + scripts.parent, function (error, stdout, stderr) {});
 
   var started = false;
-  parent.stdout.on('data', (data) => {
+  parent.stdout.on('data', function (data) {
     if (started) return;
     started = true;
 
@@ -70,7 +70,7 @@ test(cyan('Spawn a Child Process and psTree with a String as pid'), function (t)
   var child = cp.exec('node ' + scripts.child, function(error, stdout, stderr) {});
 
   var started = false;
-  child.stdout.on('data', (data) => {
+  child.stdout.on('data', function (data) {
     if (started) return;
     started = true;
 
