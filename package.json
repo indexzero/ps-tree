@@ -2,22 +2,21 @@
   "name": "ps-tree",
   "version": "1.1.0",
   "description": "Get all children of a pid",
-  "homepage": "http://github.com/indexzero/ps-tree",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/indexzero/ps-tree.git"
+  "license": "MIT",
+  "homepage": "http://github.com/indexzero/ps-tree#readme",
+  "repository": "github:indexzero/ps-tree.git",
+  "bugs": {
+    "url": "https://github.com/indexzero/ps-tree/issues",
+    "email": "charlie.robbins@gmail.com"
   },
   "dependencies": {
     "event-stream": "~3.3.0"
   },
-  "license": "MIT",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
-    {
-      "name": "Zhuohuan LI",
-      "url": "https://github.com/zixia",
-      "email": "zixia@zixia.net"
-    }
+    "Zhuohuan LI <zixia@zixia.net> (https://github.com/zixia)",
+    "Simone Primarosa <simonepri@outlook.com> (https://github.com/simonepri)"
+  ],
   "keyboards": [
     "ps-tree",
     "ps",
@@ -33,8 +32,8 @@
     "bin",
     "index.js"
   ],
-  "directories": {
-    "test": "test"
+  "engines": {
+    "node": ">= 0.10"
   },
   "scripts": {
     "test": "istanbul cover node_modules/tape/bin/tape test/test.js test/direct.js",
@@ -48,8 +47,5 @@
     "pre-commit": "0.0.9",
     "tape": "^4.9.0",
     "tree-kill": "^1.1.0"
-  },
-  "engines": {
-    "node": ">= 0.10"
   }
 }
