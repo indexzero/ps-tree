@@ -25,6 +25,13 @@
     "ppid",
     "pid"
   ],
+  "main": "index.js",
+  "bin": {
+    "ps-tree": "./bin/ps-tree.js"
+  },
+  "files": [
+    "bin",
+    "index.js"
   ],
   "directories": {
     "test": "test"
