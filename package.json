@@ -29,13 +29,13 @@
     "codeclimate": "cross-env CODECLIMATE_REPO_TOKEN=84436b4f13c70ace9c62e7f04928bf23c234eb212c0232d39d7fb1535beb2da5 codeclimate < coverage/lcov.info"
   },
   "devDependencies": {
-    "chalk": "^1.0.0",
-    "codeclimate-test-reporter": "0.0.4",
-    "cross-env": "^1.0.8",
-    "istanbul": "^0.3.20",
+    "chalk": "^2.3.2",
+    "codeclimate-test-reporter": "^0.5.0",
+    "cross-env": "^5.1.4",
+    "istanbul": "^0.4.5",
     "pre-commit": "0.0.9",
     "precommit": "^1.1.5",
-    "tape": "^3.0.3",
+    "tape": "^4.9.0",
     "tree-kill": "^1.1.0"
   },
   "pre-commit": [
