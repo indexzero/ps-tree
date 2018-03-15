@@ -34,14 +34,9 @@
     "cross-env": "^5.1.4",
     "istanbul": "^0.4.5",
     "pre-commit": "0.0.9",
-    "precommit": "^1.1.5",
     "tape": "^4.9.0",
     "tree-kill": "^1.1.0"
   },
-  "pre-commit": [
-    "coverage",
-    "codeclimate"
-  ],
   "engines": {
     "node": ">= 0.10"
   }
