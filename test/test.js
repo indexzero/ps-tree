@@ -29,7 +29,7 @@ test('Spawn a Parent process which has ten Child processes', function (t) {
 
       t.equal(children.length, 10, 'There should be 10 active child processes');
       if (children.length !== 10) {
-        t.comment(parent.pid);
+        t.comment(parent.pid.toString());
         t.comment(JSON.stringify(children, null, 2));
       }
 
@@ -73,7 +73,7 @@ test('Spawn a Child Process which has zero Child processes', function (t) {
 
       t.equal(children.length, 0, 'There should be no active child processes');
       if (children.length !== 0) {
-        t.comment(parent.pid);
+        t.comment(parent.pid.toString());
         t.comment(JSON.stringify(children, null, 2));
       }
 
