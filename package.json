@@ -4,7 +4,7 @@
   "description": "Get all children of a pid",
   "license": "MIT",
   "homepage": "http://github.com/indexzero/ps-tree#readme",
-  "repository": "github:indexzero/ps-tree.git",
+  "repository": "github:indexzero/ps-tree",
   "bugs": {
     "url": "https://github.com/indexzero/ps-tree/issues",
     "email": "charlie.robbins@gmail.com"
