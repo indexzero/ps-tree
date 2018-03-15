@@ -25,4 +25,3 @@ script:
   - npm test
 after_success:
   - npm run coverage
-  - npm run codeclimate
