@@ -13,7 +13,7 @@ var scripts = {
 
 test('Spawn a Parent process which has ten Child processes', function (t) {
   t.timeoutAfter(5000);
-  var parent = cp.exec('node ' + scripts.parent);
+  var parent = cp.spawn('node', [scripts.parent]);
 
   var executed = false;
   parent.stdout.on('data', function (data) {
@@ -57,7 +57,7 @@ test('Spawn a Parent process which has ten Child processes', function (t) {
 
 test('Spawn a Child Process which has zero Child processes', function (t) {
   t.timeoutAfter(5000);
-  var child = cp.exec('node ' + scripts.child);
+  var child = cp.spawn('node', [scripts.child]);
 
   var executed = false;
   child.stdout.on('data', function (data) {
