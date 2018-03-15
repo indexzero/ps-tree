@@ -1,7 +1,8 @@
+var path = require('path');
 var cp = require('child_process');
 
 for (var i = 0; i < 10; i++) {
-  var child = cp.exec("node ./test/exec/child.js");
+  var child = cp.fork(path.join(__dirname, 'child.js'));
 }
 
 console.log(process.pid);
