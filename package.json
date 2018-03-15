@@ -18,6 +18,13 @@
       "url": "https://github.com/zixia",
       "email": "zixia@zixia.net"
     }
+  "keyboards": [
+    "ps-tree",
+    "ps",
+    "tree",
+    "ppid",
+    "pid"
+  ],
   ],
   "directories": {
     "test": "test"
