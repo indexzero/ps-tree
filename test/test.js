@@ -15,11 +15,7 @@ test('Spawn a Parent process which has ten Child processes', function (t) {
   t.timeoutAfter(10000);
   var parent = cp.spawn('node', [scripts.parent]);
 
-  var executed = false;
   parent.stdout.on('data', function (data) {
-    if (executed) return;
-    executed = true;
-
     psTree(parent.pid, function (error, children) {
       if (error) {
         t.error(error);
@@ -59,11 +55,7 @@ test('Spawn a Child Process which has zero Child processes', function (t) {
   t.timeoutAfter(10000);
   var child = cp.spawn('node', [scripts.child]);
 
-  var executed = false;
   child.stdout.on('data', function (data) {
-    if (executed) return;
-    executed = true;
-
     psTree(child.pid, function (error, children) {
       if (error) {
         t.error(error);
