@@ -40,14 +40,14 @@ test('Spawn a Parent process which has ten Child processes', function (t) {
           return;
         }
 
-        psTree(parent.pid, function (error, children) {
+        psTree(parent.pid, function (error, zombies) {
           if (error) {
             t.error(error);
             t.end();
             return;
           }
 
-          t.equal(children.length, 0, "There should be no active child processes after killing them");
+          t.equal(zombies.length, 0, "There should be no active child processes after killing them");
           t.end();
         });
       });
