@@ -1,4 +1,4 @@
-# ps-tree [![Build Status](https://travis-ci.org/indexzero/ps-tree.svg)](https://travis-ci.org/indexzero/ps-tree) [![Build status](https://ci.appveyor.com/api/projects/status/15yvc221rx8lt8o7?svg=true)](https://ci.appveyor.com/project/zixia/ps-tree)
+# ps-tree [![Build Status](https://travis-ci.org/indexzero/ps-tree.svg)](https://travis-ci.org/indexzero/ps-tree)
 
 [![Code Climate](https://codeclimate.com/github/indexzero/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/indexzero/ps-tree)
 [![Test Coverage](https://codeclimate.com/github/indexzero/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/indexzero/ps-tree)
