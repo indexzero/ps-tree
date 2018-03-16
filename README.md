@@ -1,5 +1,6 @@
-# ps-tree [![Build Status](https://travis-ci.org/indexzero/ps-tree.svg)](https://travis-ci.org/indexzero/ps-tree)
+# ps-tree
 
+[![Build Status](https://travis-ci.org/indexzero/ps-tree.svg)](https://travis-ci.org/indexzero/ps-tree)
 [![Code Climate](https://codeclimate.com/github/indexzero/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/indexzero/ps-tree)
 [![Test Coverage](https://codeclimate.com/github/indexzero/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/indexzero/ps-tree)
 [![npm version](https://badge.fury.io/js/ps-tree.svg)](http://badge.fury.io/js/ps-tree)
