@@ -24,6 +24,10 @@
   "bin": {
     "ps-tree": "./bin/ps-tree.js"
   },
+  "files": [
+    "bin",
+    "index.js"
+  ],
   "engines": {
     "node": ">= 0.10"
   },
