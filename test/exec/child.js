@@ -1,7 +1,6 @@
-// does nothing child process
-console.log("Child process.id: " + process.pid);
-console.log(" - - - - - - - - - - - - - - - - - - - - - - - ");
-
-setTimeout(function () {
-  /* Does nothing, but prevents exit */
-}, 1000);
+var started = false;
+setInterval(function() {
+  if (started) return;
+  console.log(process.pid);
+  started = true;
+}, 100); // Does nothing, but prevents exit
