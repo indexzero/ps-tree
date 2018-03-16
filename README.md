@@ -55,6 +55,7 @@ If you prefer to run **psTree** from the command line, use: `node ./bin/ps-tree.
 
 ## Cross Platform support
 
+
 The `ps-tree` module behaves differently on *nix vs. Windows by spawning different programs and parsing their output. This is based on `process.platform` and not on checking to see if a `ps` compatible program exists on the system.
 
 #### *nix
