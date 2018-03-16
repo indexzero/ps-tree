@@ -39,6 +39,9 @@
   "dependencies": {
     "event-stream": "=3.3.4"
   },
+  "dependencies": {
+    "event-stream": "~3.3.0"
+  },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.0",
     "cross-env": "^2.0.1",
