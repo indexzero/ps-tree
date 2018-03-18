@@ -3,11 +3,9 @@
 [![Build Status](https://travis-ci.org/indexzero/ps-tree.svg)](https://travis-ci.org/indexzero/ps-tree)
 [![Code Climate](https://codeclimate.com/github/indexzero/ps-tree/badges/gpa.svg)](https://codeclimate.com/github/indexzero/ps-tree)
 [![Test Coverage](https://codeclimate.com/github/indexzero/ps-tree/badges/coverage.svg)](https://codeclimate.com/github/indexzero/ps-tree)
-[![npm version](https://badge.fury.io/js/ps-tree.svg)](http://badge.fury.io/js/ps-tree)
-[![Node.js Version][node-version-image]][node-version-url]
+[![npm Version](https://img.shields.io/npm/v/ps-tree.svg)](https://www.npmjs.com/package/ps-tree)
+[![Node.js Version](https://img.shields.io/node/v/ps-tree.svg?style=flat)](http://nodejs.org/download/)
 [![Dependency Status](https://david-dm.org/indexzero/ps-tree.svg)](https://david-dm.org/indexzero/ps-tree)
-[node-version-image]: https://img.shields.io/node/v/listdirs.svg?style=flat
-[node-version-url]: http://nodejs.org/download/
 
 Sometimes you cannot kill child processes like you would expect, this a feature of UNIX.
 
