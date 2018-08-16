@@ -42,9 +42,9 @@ module.exports = function childrenOfPid(pid, callback) {
   var processLister;
   if (process.platform === 'win32') {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
-    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
+    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status,WorkingSetSize']);
   } else {
-    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
+    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm,rss']);
   }
 
   es.connect(
@@ -61,6 +61,12 @@ module.exports = function childrenOfPid(pid, callback) {
         //
         headers = headers.map(normalizeHeader);
         return cb();
+      }
+
+      // Convert RSS to number of bytes
+      columns[4] = parseInt(columns[4], 10);
+      if (process.platform !== 'win32') {
+          columns[4] *= 1024;
       }
 
       var row = {};
@@ -111,6 +117,9 @@ function normalizeHeader(str) {
       break;
     case 'Status':
       return 'STAT';
+      break;
+    case 'WorkingSetSize':
+      return 'RSS';
       break;
     default:
       throw new Error('Unknown process listing header: ' + str);
