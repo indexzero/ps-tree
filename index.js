@@ -3,8 +3,14 @@
 var spawn = require('child_process').spawn,
     es    = require('event-stream');
 
-module.exports = function childrenOfPid(pid, callback) {
+module.exports = function childrenOfPid(pid, includeRoot, callback) {
   var headers = null;
+
+  // includeRoot is optional parameter
+  if (typeof includeRoot === 'function') {
+      callback = includeRoot;
+      includeRoot = false;
+  }
 
   if (typeof callback !== 'function') {
     throw new Error('childrenOfPid(pid, callback) expects callback');
@@ -79,13 +85,17 @@ module.exports = function childrenOfPid(pid, callback) {
       return cb(null, row);
     }),
     es.writeArray(function (err, ps) {
-      var parents = [pid],
-          children = [];
+      var parents = {};
+      var children = [];
+
+      parents[pid] = true;
 
       ps.forEach(function (proc) {
-        if (parents.indexOf(proc.PPID) !== -1) {
-          parents.push(proc.PID)
-          children.push(proc)
+        if (parents[proc.PPID]) {
+          parents[proc.PID] = true;
+          children.push(proc);
+        } else if (includeRoot && pid === proc.PID) {
+          children.push(proc);
         }
       });
 
