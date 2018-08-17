@@ -65,9 +65,9 @@ test(cyan('Includes itself it includeRoot is true'), function (t) {
     };
 
     t.equal(current.PID, '' + process.pid, green('✓ Current PID is valid'));
-    t.equal(current.COMM, 'node', green('✓ Current COMM is node'));
+    t.equal(current.COMMAND, 'node', green('✓ Current COMM is node'));
     t.notEqual(other.PID, '' + process.pid, green('✓ Current PID is valid'));
-    t.equal(other.COMM, 'ps', green('✓ Current COMM is ps'));
+    t.equal(other.COMMAND, 'ps', green('✓ Current COMM is ps'));
     t.end();
   });
 });

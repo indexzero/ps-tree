@@ -50,11 +50,11 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
     processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status,WorkingSetSize']);
   } else {
-    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm,rss']);
+    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,command,rss']);
   }
 
   es.connect(
-    // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
+    // spawn('ps', ['-A', '-o', 'ppid,pid,stat,command']).stdout,
     processLister.stdout,
     es.split(),
     es.map(function (line, cb) { //this could parse alot of unix command output
