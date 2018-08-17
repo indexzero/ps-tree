@@ -60,7 +60,7 @@ The `ps-tree` module behaves differently on *nix vs. Windows by spawning differe
 
 1. " <defunct> " need to be striped
 ```bash
-$ ps -A -o command,ppid,pid,stat
+$ ps -A -o comm,ppid,pid,stat
 COMMAND          PPID   PID STAT
 bbsd             2899 16958 Ss
 watch <defunct>  1914 16964 Z
