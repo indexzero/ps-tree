@@ -1,13 +1,12 @@
 {
-  "name": "ps-tree",
-  "version": "1.1.0",
+  "name": "@apify/ps-tree",
+  "version": "1.1.1",
   "description": "Get all children of a pid",
   "license": "MIT",
-  "homepage": "http://github.com/indexzero/ps-tree#readme",
-  "repository": "github:indexzero/ps-tree",
+  "homepage": "https://github.com/apifytech/ps-tree",
+  "repository": "https://github.com/apifytech/ps-tree",
   "bugs": {
-    "url": "https://github.com/indexzero/ps-tree/issues",
-    "email": "charlie.robbins@gmail.com"
+    "url": "https://github.com/apifytech/ps-tree/issues"
   },
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [

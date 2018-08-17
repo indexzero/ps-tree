@@ -7,6 +7,8 @@
 [![Node.js Version](https://img.shields.io/node/v/ps-tree.svg?style=flat)](http://nodejs.org/download/)
 [![Dependency Status](https://david-dm.org/indexzero/ps-tree.svg)](https://david-dm.org/indexzero/ps-tree)
 
+NOTE: This is a fork of [ps-tree](https://www.npmjs.com/package/ps-tree) NPM package, with some fixes and extras.
+
 Sometimes you cannot kill child processes like you would expect, this a feature of UNIX.
 
 >in UNIX, a process may terminate by using the exit call, and it's parent process may wait for that event by using the wait system call. the wait system call returns the process identifier of a terminated child, so that the parent tell which of the possibly many children has terminated. If the parent terminates, however, all it's children have assigned as their new parent the init process. Thus, the children still have a parent to collect their status and execution statistics.
