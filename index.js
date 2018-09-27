@@ -53,6 +53,8 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
     processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm,rss']);
   }
 
+  processLister.on('error', callback);
+
   es.connect(
     // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
     processLister.stdout,
