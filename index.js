@@ -3,8 +3,14 @@
 var spawn = require('child_process').spawn,
     es    = require('event-stream');
 
-module.exports = function childrenOfPid(pid, callback) {
+module.exports = function childrenOfPid(pid, includeRoot, callback) {
   var headers = null;
+
+  // includeRoot is optional parameter
+  if (typeof includeRoot === 'function') {
+      callback = includeRoot;
+      includeRoot = false;
+  }
 
   if (typeof callback !== 'function') {
     throw new Error('childrenOfPid(pid, callback) expects callback');
@@ -42,10 +48,12 @@ module.exports = function childrenOfPid(pid, callback) {
   var processLister;
   if (process.platform === 'win32') {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
-    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
+    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status,WorkingSetSize']);
   } else {
-    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
+    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm,rss']);
   }
+
+  processLister.on('error', callback);
 
   es.connect(
     // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
@@ -63,6 +71,12 @@ module.exports = function childrenOfPid(pid, callback) {
         return cb();
       }
 
+      // Convert RSS to number of bytes
+      columns[4] = parseInt(columns[4], 10);
+      if (process.platform !== 'win32') {
+          columns[4] *= 1024;
+      }
+
       var row = {};
       // For each header
       var h = headers.slice();
@@ -73,13 +87,17 @@ module.exports = function childrenOfPid(pid, callback) {
       return cb(null, row);
     }),
     es.writeArray(function (err, ps) {
-      var parents = [pid],
-          children = [];
+      var parents = {};
+      var children = [];
+
+      parents[pid] = true;
 
       ps.forEach(function (proc) {
-        if (parents.indexOf(proc.PPID) !== -1) {
-          parents.push(proc.PID)
-          children.push(proc)
+        if (parents[proc.PPID]) {
+          parents[proc.PID] = true;
+          children.push(proc);
+        } else if (includeRoot && pid === proc.PID) {
+          children.push(proc);
         }
       });
 
@@ -96,6 +114,8 @@ module.exports = function childrenOfPid(pid, callback) {
  */
 function normalizeHeader(str) {
   if (process.platform !== 'win32') {
+    // HOTFIX: On Mac ps gives "COMM" instead of "COMMAND"
+    if (str === "COMM") return "COMMAND";
     return str;
   }
 
@@ -111,6 +131,9 @@ function normalizeHeader(str) {
       break;
     case 'Status':
       return 'STAT';
+      break;
+    case 'WorkingSetSize':
+      return 'RSS';
       break;
     default:
       throw new Error('Unknown process listing header: ' + str);

@@ -49,6 +49,28 @@ test(cyan('FORCE ERROR by calling psTree without supplying a Callback'), functio
   t.end();
 });
 
+test(cyan('Includes itself it includeRoot is true'), function (t) {
+  psTree(process.pid, true, function(err, children) {
+    if (err) { console.log(err); }
+    t.equal(children.length, 2, green('✓ Two processes found'));
+
+    var current;
+    var other;
+    if (children[0].PID === '' + process.pid) {
+      current = children[0];
+      other = children[1];
+    } else {
+      current = children[1];
+      other = children[0];
+    };
+
+    t.equal(current.PID, '' + process.pid, green('✓ Current PID is valid'));
+    t.equal(current.COMMAND, 'node', green('✓ Current COMM is node'));
+    t.notEqual(other.PID, '' + process.pid, green('✓ Current PID is valid'));
+    t.equal(other.COMMAND, 'ps', green('✓ Current COMM is ps'));
+    t.end();
+  });
+});
 
 test(cyan('Spawn a Child Process and psTree with a String as pid'), function (t) {
   var child = cp.exec('node ' + scripts.child, function(error, stdout, stderr) {});

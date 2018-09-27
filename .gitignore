@@ -26,3 +26,9 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# WebStorm IDE settings
+.idea
+
+# NPM package lock file
+package-lock.json
