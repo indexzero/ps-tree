@@ -78,4 +78,15 @@ System                        0                4
 smss.exe                      4                228
 ```
 
+### Mac/Darwin
+
+1. " " need to be striped
+
+```shell
+$ ps -A -o comm,ppid,pid,stat
+COMM              PPID   PID STAT
+/sbin/launchd        0     1 Ss
+/usr/libexec/Use     1    43 Ss
+```
+
 ### LICENSE: MIT
