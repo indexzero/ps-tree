@@ -1,6 +1,6 @@
 {
   "name": "ps-tree",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Get all children of a pid",
   "license": "MIT",
   "homepage": "http://github.com/indexzero/ps-tree#readme",
