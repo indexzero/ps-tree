@@ -39,7 +39,7 @@
     "codeclimate": "cross-env CODECLIMATE_REPO_TOKEN=84436b4f13c70ace9c62e7f04928bf23c234eb212c0232d39d7fb1535beb2da5 codeclimate < coverage/lcov.info"
   },
   "dependencies": {
-    "event-stream": "~3.3.0"
+    "event-stream": "=3.3.4"
   },
   "devDependencies": {
     "chalk": "^1.0.0",
