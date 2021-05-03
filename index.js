@@ -73,7 +73,7 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
 
       // Convert RSS to number of bytes
       if (process.platform == 'win32') {
-          // For Windows, WMIC.exe never returns any value for "Status" and it causes "WorkingSetSize" is set at columns[3].
+          // For Windows, WMIC.exe never returns any value for "Status" and it causes "WorkingSetSize" is set at columns[3]
           // See: https://docs.microsoft.com/ja-jp/windows/win32/cimwin32prov/win32-process?redirectedfrom=MSDN
           columns[4] = parseInt(columns[3], 10);
           columns[3] = null;
