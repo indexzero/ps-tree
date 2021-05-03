@@ -9,6 +9,9 @@ var red = chalk.red,
     green = chalk.green,
     cyan = chalk.cyan;
 
+var isWin = process.platform === 'win32';
+var isNumGreaterThanZero = (n) => !isNaN(parseInt(n, 10)) && n > 0;
+
 var scripts = {
   parent: path.join(__dirname, 'exec', 'parent.js'),
   child: path.join(__dirname, 'exec', 'child.js')
@@ -65,9 +68,11 @@ test(cyan('Includes itself it includeRoot is true'), function (t) {
     };
 
     t.equal(current.PID, '' + process.pid, green('✓ Current PID is valid'));
-    t.equal(current.COMMAND, 'node', green('✓ Current COMM is node'));
+    t.equal(current.COMMAND, isWin ? 'node.exe' : 'node', green('✓ Current COMM is node'));
+    t.equal(isNumGreaterThanZero(current.RSS), true, green('✓ Current RSS is valid'));
     t.notEqual(other.PID, '' + process.pid, green('✓ Current PID is valid'));
-    t.equal(other.COMMAND, 'ps', green('✓ Current COMM is ps'));
+    t.equal(other.COMMAND, isWin ? 'WMIC.exe' : 'ps', green('✓ Current COMM is ps'));
+    t.equal(isNumGreaterThanZero(other.RSS), true, green('✓ Other RSS is valid'));
     t.end();
   });
 });

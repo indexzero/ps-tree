@@ -72,8 +72,14 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
       }
 
       // Convert RSS to number of bytes
-      columns[4] = parseInt(columns[4], 10);
-      if (process.platform !== 'win32') {
+      if (process.platform == 'win32') {
+          // For Windows, WMIC.exe never returns any value for "Status" and it causes "WorkingSetSize" is set at columns[3].
+          // See: https://docs.microsoft.com/ja-jp/windows/win32/cimwin32prov/win32-process?redirectedfrom=MSDN
+          columns[4] = parseInt(columns[3], 10);
+          columns[3] = null;
+      }
+      else {
+          columns[4] = parseInt(columns[4], 10);
           columns[4] *= 1024;
       }
 
@@ -122,19 +128,14 @@ function normalizeHeader(str) {
   switch (str) {
     case 'Name':
       return 'COMMAND';
-      break;
     case 'ParentProcessId':
       return 'PPID';
-      break;
     case 'ProcessId':
       return 'PID';
-      break;
     case 'Status':
       return 'STAT';
-      break;
     case 'WorkingSetSize':
       return 'RSS';
-      break;
     default:
       throw new Error('Unknown process listing header: ' + str);
   }
