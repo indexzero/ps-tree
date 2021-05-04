@@ -48,7 +48,7 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
   var processLister;
   if (process.platform === 'win32') {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
-    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status,WorkingSetSize']);
+    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,WorkingSetSize']);
   } else {
     processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm,rss']);
   }
@@ -72,8 +72,11 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
       }
 
       // Convert RSS to number of bytes
-      columns[4] = parseInt(columns[4], 10);
-      if (process.platform !== 'win32') {
+      if (process.platform == 'win32') {
+          columns[3] = parseInt(columns[3], 10);
+      }
+      else {
+          columns[4] = parseInt(columns[4], 10);
           columns[4] *= 1024;
       }
 
@@ -82,6 +85,13 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
       var h = headers.slice();
       while (h.length) {
         row[h.shift()] = h.length ? columns.shift() : columns.join(' ');
+      }
+
+      // For Windows, WMIC.exe never returns any value for "Status" which used to get value corresponding to "STAT"
+      // See: https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process?redirectedfrom=MSDN
+      // So just set "null" for the backward compatibility.
+      if (process.platform == 'win32') {
+        row['STAT'] = null;
       }
 
       return cb(null, row);
@@ -122,19 +132,14 @@ function normalizeHeader(str) {
   switch (str) {
     case 'Name':
       return 'COMMAND';
-      break;
     case 'ParentProcessId':
       return 'PPID';
-      break;
     case 'ProcessId':
       return 'PID';
-      break;
     case 'Status':
       return 'STAT';
-      break;
     case 'WorkingSetSize':
       return 'RSS';
-      break;
     default:
       throw new Error('Unknown process listing header: ' + str);
   }
