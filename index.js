@@ -45,12 +45,20 @@ module.exports = function childrenOfPid(pid, callback) {
   // smss.exe                      4                228
   // ```
 
+  var cmd;
   var processLister;
+
   if (process.platform === 'win32') {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
-    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
+    cmd = 'wmix.exe';
+    processLister = spawn(cmd, ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
   } else {
-    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
+    cmd = 'ps';
+    processLister = spawn(cmd, ['-A', '-o', 'ppid,pid,stat,comm']);
+  }
+
+  if (!processLister.stdout) {
+    return cb(new Error('Unable to spawn "' + cmd + '"'));
   }
 
   es.connect(
