@@ -48,9 +48,9 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
   var processLister;
   if (process.platform === 'win32') {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
-    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,WorkingSetSize']);
+    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'ProcessId,ParentProcessId,WorkingSetSize,Name']);
   } else {
-    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm,rss']);
+    processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,rss,comm']);
   }
 
   processLister.on('error', callback);
@@ -73,11 +73,11 @@ module.exports = function childrenOfPid(pid, includeRoot, callback) {
 
       // Convert RSS to number of bytes
       if (process.platform == 'win32') {
-          columns[3] = parseInt(columns[3], 10);
+          columns[2] = parseInt(columns[2], 10);
       }
       else {
-          columns[4] = parseInt(columns[4], 10);
-          columns[4] *= 1024;
+          columns[3] = parseInt(columns[3], 10);
+          columns[3] *= 1024;
       }
 
       var row = {};
