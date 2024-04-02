@@ -54,7 +54,6 @@ module.exports = function childrenOfPid(pid, callback) {
   }
 
   es.connect(
-    // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
     processLister.stdout,
     es.split(),
     es.map(function (line, cb) { //this could parse alot of unix command output
