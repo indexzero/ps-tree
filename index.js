@@ -44,11 +44,38 @@ module.exports = function childrenOfPid(pid, callback) {
   // System                        0                4
   // smss.exe                      4                228
   // ```
+  //
+  // Win32 without wmic:
+  // TODO
+  // 1. wmic PROCESS WHERE ParentProcessId=4604 GET Name,ParentProcessId,ProcessId,Status)
+  // 2. The order of head columns is fixed
+  // ```powershell
+  // > Get-WmiObject -Class Win32_Process | Select-Object -Property Name,ProcessId,ParentProcessId,Status | Format-Table
+  //(this is an empty line returned by powershell script)
+  // Name                ProcessId ParentProcessId Status
+  // ----                --------- --------------- ------
+  // System Idle Process         0               0
+  // System                      4               0
+  // smss.exe                                  228
+  // ```
 
   var processLister;
   if (process.platform === 'win32') {
     // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
+    // Trying with WMIC
     processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
+    processLister.on('error', (code) => {
+      // Drop error indicating that creating WMIC failed
+    });
+
+    // check if WMIC exists
+    if (!processLister.connected) {
+      // Trying with powershell
+      processLister = spawn('powershell.exe',['Get-WmiObject -Class Win32_Process | Select-Object -Property Name,ProcessId,ParentProcessId,Status | Format-Table']);
+      processLister.on('error', (code) => {
+        // Drop error indicating that creating Powershell failed too; results in empty list
+      });
+    }
   } else {
     processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
   }
@@ -57,8 +84,14 @@ module.exports = function childrenOfPid(pid, callback) {
     // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
     processLister.stdout,
     es.split(),
-    es.map(function (line, cb) { //this could parse alot of unix command output
+    es.map(function (line, cb) { //this could parse a lot of unix command output
       var columns = line.trim().split(/\s+/);
+
+      // Drop additional lines from output of win32 powershell
+      if ((line.length === 0) || (columns[0] === ('----'))) {
+        return cb();
+      }
+
       if (!headers) {
         headers = columns;
 
