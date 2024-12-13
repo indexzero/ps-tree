@@ -1,10 +1,10 @@
 'use strict';
 
-var spawn = require('child_process').spawn,
-    es    = require('event-stream');
+const spawn = require('child_process').spawn;
+const es    = require('event-stream');
 
 module.exports = function childrenOfPid(pid, callback) {
-  var headers = null;
+  let headers = null;
 
   if (typeof callback !== 'function') {
     throw new Error('childrenOfPid(pid, callback) expects callback');
@@ -35,20 +35,24 @@ module.exports = function childrenOfPid(pid, callback) {
   // /usr/libexec/Use     1    43 Ss
   //
   // Win32:
-  // 1. wmic PROCESS WHERE ParentProcessId=4604 GET Name,ParentProcessId,ProcessId,Status)
-  // 2. The order of head columns is fixed
+  // 1. powershell Get-WmiObject -Class Win32_Process | Select-Object -Property Name,ProcessId,ParentProcessId,Status | Format-Table
+  // 2. Name column content may contain spaces; columns have a fixed width;
+  //    status column ist usually empty. Output contains empty lines and dashes under the header.
   // ```shell
-  // > wmic PROCESS GET Name,ProcessId,ParentProcessId,Status
-  // Name                          ParentProcessId  ProcessId   Status
-  // System Idle Process           0                0
-  // System                        0                4
-  // smss.exe                      4                228
+  // > powershell Get-WmiObject -Class Win32_Process | Select-Object -Property Name,ProcessId,ParentProcessId,Status | Format-Table
+  // Name                         ProcessId ParentProcessId Status
+  // ----                         --------- --------------- ------
+  // System Idle Process                  0               0
+  // System                               4               0
+  // Secure System                      188               4
+  // Registry                           232               4
+  // smss.exe                           760               4
   // ```
 
-  var processLister;
+  let processLister;
   if (process.platform === 'win32') {
-    // See also: https://github.com/nodejs/node-v0.x-archive/issues/2318
-    processLister = spawn('wmic.exe', ['PROCESS', 'GET', 'Name,ProcessId,ParentProcessId,Status']);
+    // WMIC is deprecated since 2016; using powershell 5.1
+    processLister = spawn('powershell.exe',['Get-WmiObject -Class Win32_Process | Select-Object -Property Name,ProcessId,ParentProcessId,Status | Format-Table']);
   } else {
     processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
   }
@@ -57,23 +61,34 @@ module.exports = function childrenOfPid(pid, callback) {
     // spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']).stdout,
     processLister.stdout,
     es.split(),
-    es.map(function (line, cb) { //this could parse alot of unix command output
-      var columns = line.trim().split(/\s+/);
-      if (!headers) {
-        headers = columns;
+    es.map(function (line, cb) { //this could parse a lot of unix command output
+      const trimmedLine = line.trim();
 
-        //
-        // Rename Win32 header name, to as same as the linux, for compatible.
-        //
-        headers = headers.map(normalizeHeader);
+      // Windows: remove unnecessary lines created by powershell
+      if ((trimmedLine.length === 0) || trimmedLine.includes('----')) {
         return cb();
       }
 
-      var row = {};
-      // For each header
-      var h = headers.slice();
-      while (h.length) {
-        row[h.shift()] = h.length ? columns.shift() : columns.join(' ');
+      /**
+       * The first line contains the column headers. All columns have a fixed width.
+       * Windows: COMMANDs may contain white spaces; therefore we cannot simply
+       *          split the lines using white spaces as separators.
+       */
+      if (headers === null) {
+        headers = getColumnDefs(trimmedLine);
+
+        // For compatibility rename windows header names to the linux header names.
+        headers = headers.map(header => {
+          header.header = normalizeHeader(header.header);
+          return header;
+        });
+        return cb();
+      }
+
+      let row = {};
+      for (const headerDef of headers) {
+        const columnValue = trimmedLine.substring(headerDef.start, headerDef.end).trim();
+        row[headerDef.header] = columnValue;
       }
 
       return cb(null, row);
@@ -94,6 +109,49 @@ module.exports = function childrenOfPid(pid, callback) {
     })
   ).on('error', callback)
 }
+
+  /**
+   * Extract the column definitions from the first line into an array of objects.
+   * Object structure:
+   * {
+   *    start: index of the first character of the column,
+   *    end: index of the first character after the column,
+   *    header: text of the column header
+   * }
+   * On Linux: the first column header is right aligned.
+   * On Windows: the first column header is left aligned.
+   * @param {string} line - string with the headers of the columns
+   * @returns {Object[]} Array of objects containing the definition of 1 column
+   */
+  function getColumnDefs(line) {
+    const columnDefinitions = [];
+    let startOfColumnIncl = 0;
+    let endOfColumnExcl = 0;
+    let foundStartOfHeader = false;
+    let foundEndOfHeader = false;
+    for (let i = 0; i < line.length; i++) {
+      const isWhitespace = line.substring(i, i + 1).trim() === '';
+      if (!foundStartOfHeader && !isWhitespace) {
+        // search for first header, if it is right aligned (on linux)
+        foundStartOfHeader = true;
+      } else if (foundStartOfHeader && isWhitespace) {
+        // search for end of header text
+        foundEndOfHeader = true;
+      } else if (foundEndOfHeader && !isWhitespace) {
+        endOfColumnExcl = i - 1;
+        const header = line.substring(startOfColumnIncl, endOfColumnExcl).trim();
+        columnDefinitions.push({start:startOfColumnIncl, end:endOfColumnExcl, header:header});
+        startOfColumnIncl = i;
+        foundStartOfHeader = true;
+        foundEndOfHeader = false;
+      }
+    }
+
+    // last column
+    const header = line.substring(startOfColumnIncl, line.length).trim();
+    columnDefinitions.push({start:startOfColumnIncl, end:line.length, header:header});
+    return columnDefinitions;
+  }
 
 /**
  * Normalizes the given header `str` from the Windows
