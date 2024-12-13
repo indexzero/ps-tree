@@ -51,7 +51,7 @@ module.exports = function childrenOfPid(pid, callback) {
 
   let processLister;
   if (process.platform === 'win32') {
-    // WMIC is deprecated sine 2016; using powershell 5.1
+    // WMIC is deprecated since 2016; using powershell 5.1
     processLister = spawn('powershell.exe',['Get-WmiObject -Class Win32_Process | Select-Object -Property Name,ProcessId,ParentProcessId,Status | Format-Table']);
   } else {
     processLister = spawn('ps', ['-A', '-o', 'ppid,pid,stat,comm']);
